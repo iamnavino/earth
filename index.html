@@ -36,7 +36,41 @@ window.addEventListener( "earthjsload", function() {
 		autoRotateStart: 2000,
 	} );
 	
-	
+		
+	myearth.addEventListener( "ready", function() {
+
+this.startAutoRotate();
+
+// connections
+
+var line = {
+	color : '#009CFF',
+	opacity: 0.35,
+	hairline: true,
+	offset: -0.5
+};
+
+for ( var i in connections ) {			
+	line.locations = [ { lat: connections[i][0], lng: connections[i][1] }, { lat: connections[i][2], lng: connections[i][3] } ];
+	this.addLine( line );
+}
+
+
+
+// add 8 shine sprites
+
+for ( var i=0; i < 8; i++ ) {
+	sprites[i] = this.addSprite( {
+		image: 'hologram/hologram-shine.svg',
+		scale: 0.01,
+		offset: -0.5,
+		opacity: 0.5
+	} );
+	pulse( i );
+}
+
+
+} );
 	myearth.addEventListener( 'click', function( event ) {
 	
 		if ( ! event.id || event.id == 'SEA' ) return; // no country hit
