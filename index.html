@@ -17,100 +17,151 @@ if ( location.protocol == 'file:' ) {
 
 var myearth;
 var sprites = [];
+var myearth;
+var selected_countries = [];
 
-window.addEventListener( 'load', function() {
+window.addEventListener( "earthjsload", function() {
 
-	myearth = new Earth( 'myearth', {
-	
-		location : { lat: 20, lng : 20 },
-	
-		light: 'none',
 
-		mapImage: 'hologram/hologram-map.svg',
-		transparent: true,
-		
-		autoRotate : true,
-		autoRotateSpeed: 1.2,
-		autoRotateDelay: 100,
-		autoRotateStart: 2000,			
-		
+	myearth = new Earth( "myearth", {
+		mapBorderColor: '#ccc',
+		mapHitTest : true
 	} );
 	
 	
-	myearth.addEventListener( "ready", function() {
-
-		this.startAutoRotate();
-
-		// connections
-		
-		var line = {
-			color : '#009CFF',
-			opacity: 0.35,
-			hairline: true,
-			offset: -0.5
-		};
-		
-		for ( var i in connections ) {			
-			line.locations = [ { lat: connections[i][0], lng: connections[i][1] }, { lat: connections[i][2], lng: connections[i][3] } ];
-			this.addLine( line );
-		}
-		
-		
-		
-		// add 8 shine sprites
-		
-		for ( var i=0; i < 8; i++ ) {
-			sprites[i] = this.addSprite( {
-				image: 'hologram/hologram-shine.svg',
-				scale: 0.01,
-				offset: -0.5,
-				opacity: 0.5
-			} );
-			pulse( i );
-		}
-		
-		
-	} );
-
 	myearth.addEventListener( 'click', function( event ) {
 	
-	if ( ! event.id || event.id == 'SEA' ) return; // no country hit
-	
-	
-	// toggle selection		
-	if ( selected_countries.indexOf(event.id) != -1 ) { // remove
-		selected_countries.splice(selected_countries.indexOf(event.id), 1);
-	} else { // add
-		selected_countries.push( event.id );
-	}
-	
-	
-	// build mapStyles CSS string like: #US, #CN, #RU { fill: green; }
-	if ( selected_countries.length ) {
-	
-		myearth.mapStyles = '#' + selected_countries.join(', #') + ' { fill: #44cc44; }';
+		if ( ! event.id || event.id == 'SEA' ) return; // no country hit
 		
-		// show info
-		document.getElementById( 'info' ).innerHTML = 'Selected: ' + selected_countries.join(', ');
 		
-	} else {
-	
-		myearth.mapStyles = '';
+		// toggle selection		
+		if ( selected_countries.indexOf(event.id) != -1 ) { // remove
+			selected_countries.splice(selected_countries.indexOf(event.id), 1);
+		} else { // add
+			selected_countries.push( event.id );
+		}
 		
-		// show info
-		document.getElementById( 'info' ).innerHTML = 'no countries selected';
 		
-	}
+		// build mapStyles CSS string like: #US, #CN, #RU { fill: green; }
+		if ( selected_countries.length ) {
+		
+			myearth.mapStyles = '#' + selected_countries.join(', #') + ' { fill: #44cc44; }';
+			
+			// show info
+			document.getElementById( 'info' ).innerHTML = 'Selected: ' + selected_countries.join(', ');
+			
+		} else {
+		
+			myearth.mapStyles = '';
+			
+			// show info
+			document.getElementById( 'info' ).innerHTML = 'no countries selected';
+			
+		}
 
 
-	// redraw map to apply new mapStyles
-	myearth.redrawMap();
-	
+		// redraw map to apply new mapStyles
+		myearth.redrawMap();
+		
 
+	} );
+	
+	
 } );
+
+// window.addEventListener( 'load', function() {
+
+// 	myearth = new Earth( 'myearth', {
+	
+// 		location : { lat: 20, lng : 20 },
+	
+// 		light: 'none',
+
+// 		mapImage: 'hologram/hologram-map.svg',
+// 		transparent: true,
+		
+// 		autoRotate : true,
+// 		autoRotateSpeed: 1.2,
+// 		autoRotateDelay: 100,
+// 		autoRotateStart: 2000,			
+		
+// 	} );
 	
 	
-} );
+// 	myearth.addEventListener( "ready", function() {
+
+// 		this.startAutoRotate();
+
+// 		// connections
+		
+// 		var line = {
+// 			color : '#009CFF',
+// 			opacity: 0.35,
+// 			hairline: true,
+// 			offset: -0.5
+// 		};
+		
+// 		for ( var i in connections ) {			
+// 			line.locations = [ { lat: connections[i][0], lng: connections[i][1] }, { lat: connections[i][2], lng: connections[i][3] } ];
+// 			this.addLine( line );
+// 		}
+		
+		
+		
+// 		// add 8 shine sprites
+		
+// 		for ( var i=0; i < 8; i++ ) {
+// 			sprites[i] = this.addSprite( {
+// 				image: 'hologram/hologram-shine.svg',
+// 				scale: 0.01,
+// 				offset: -0.5,
+// 				opacity: 0.5
+// 			} );
+// 			pulse( i );
+// 		}
+		
+		
+// 	} );
+
+// 	myearth.addEventListener( 'click', function( event ) {
+	
+// 	if ( ! event.id || event.id == 'SEA' ) return; // no country hit
+	
+	
+// 	// toggle selection		
+// 	if ( selected_countries.indexOf(event.id) != -1 ) { // remove
+// 		selected_countries.splice(selected_countries.indexOf(event.id), 1);
+// 	} else { // add
+// 		selected_countries.push( event.id );
+// 	}
+	
+	
+// 	// build mapStyles CSS string like: #US, #CN, #RU { fill: green; }
+// 	if ( selected_countries.length ) {
+	
+// 		myearth.mapStyles = '#' + selected_countries.join(', #') + ' { fill: #44cc44; }';
+		
+// 		// show info
+// 		document.getElementById( 'info' ).innerHTML = 'Selected: ' + selected_countries.join(', ');
+		
+// 	} else {
+	
+// 		myearth.mapStyles = '';
+		
+// 		// show info
+// 		document.getElementById( 'info' ).innerHTML = 'no countries selected';
+		
+// 	}
+
+
+// 	// redraw map to apply new mapStyles
+// 	myearth.redrawMap();
+	
+
+// } );
+	
+	
+// } );
 
 
 function getRandomInt(min, max) {
