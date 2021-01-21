@@ -37,7 +37,6 @@ window.addEventListener( "earthjsload", function() {
 		
 	myearth.addEventListener( "ready", function() {
 
-this.startAutoRotate();
 
 // connections
 
@@ -85,7 +84,7 @@ for ( var i=0; i < 8; i++ ) {
 		// build mapStyles CSS string like: #US, #CN, #RU { fill: green; }
 		if ( selected_countries.length ) {
 		
-			myearth.mapStyles = '#' + selected_countries.join(', #') + ' { fill: #2596be; }';
+			myearth.mapStyles = '#' + selected_countries.join(', #') + ' { fill: #4fb400; }';
 			
 			// show info
 			document.getElementById( 'info' ).innerHTML = 'Selected: ' + selected_countries.join(', ');
