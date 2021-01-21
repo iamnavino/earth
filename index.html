@@ -31,11 +31,7 @@ window.addEventListener( "earthjsload", function() {
 
 		// mapImage: 'hologram/hologram-map.svg',
 		transparent: true,
-		
-		autoRotate : true,
-		autoRotateSpeed: 1.2,
-		autoRotateDelay: 100,
-		autoRotateStart: 2000,
+
 	} );
 	
 		
@@ -89,7 +85,7 @@ for ( var i=0; i < 8; i++ ) {
 		// build mapStyles CSS string like: #US, #CN, #RU { fill: green; }
 		if ( selected_countries.length ) {
 		
-			myearth.mapStyles = '#' + selected_countries.join(', #') + ' { fill: #44cc44; }';
+			myearth.mapStyles = '#' + selected_countries.join(', #') + ' { fill: #2596be; }';
 			
 			// show info
 			document.getElementById( 'info' ).innerHTML = 'Selected: ' + selected_countries.join(', ');
