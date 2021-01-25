@@ -1,117 +1,118 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<title>Miniature Earth | Hologram Demo</title>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width">
 
-<title>Country Selector</title>
-
 <link rel="stylesheet" href="hologram/style.css">
-<link rel="stylesheet" href="example.css">
-
 <script src="miniature.earth.core.js"></script>
-<script src="miniature.earth.js"></script>
 
 <script>
 
+if ( location.protocol == 'file:' ) {
+	alert( 'This demo does not work with the file protocol due to browser security restrictions.' );
+}
+
+
 var myearth;
-var selected_countries = [];
+var sprites = [];
 
-window.addEventListener( "earthjsload", function() {
+window.addEventListener( 'earthjsload', function() {
 
-
-	myearth = new Earth( "myearth", {
-		mapBorderColor: '#2596be',
-		mapLandColor: 'transparent', mapSeaColor: 'transparent',
-		seaColor:'red',
-		mapHitTest : true,
-		location : { lat: 22, lng : 75 },
+	myearth = new Earth( 'myearth', {
+	
+		location : { lat: 20, lng : 20 },
 	
 		light: 'none',
-
-		// mapImage: 'hologram/hologram-map.svg',
+		mapHitTest : true,
+		mapImage: 'hologram/hologram-map.svg',
 		transparent: true,
-
- autoRotate : true,
-autoRotateSpeed: 1.2,
-autoRotateDelay: 100,
-autoRotateStart: 2000,
-
+		
+		autoRotate : true,
+		autoRotateSpeed: 1.2,
+		autoRotateDelay: 100,
+		autoRotateStart: 2000,			
+		
 	} );
 	
-		
+	
 	myearth.addEventListener( "ready", function() {
 
+		this.startAutoRotate();
 
-// connections
-
-var line = {
-	color : '#009CFF',
-	opacity: 0.35,
-	hairline: true,
-	offset: -0.5
-};
-
-for ( var i in connections ) {			
-	line.locations = [ { lat: connections[i][0], lng: connections[i][1] }, { lat: connections[i][2], lng: connections[i][3] } ];
-	this.addLine( line );
-}
-
-
-
-// add 8 shine sprites
-
-for ( var i=0; i < 8; i++ ) {
-	sprites[i] = this.addSprite( {
-		image: 'hologram/hologram-shine.svg',
-		scale: 0.01,
-		offset: -0.5,
-		opacity: 0.5
+		// connections
+		
+		var line = {
+			color : '#009CFF',
+			opacity: 0.35,
+			hairline: true,
+			offset: -0.5
+		};
+		
+		for ( var i in connections ) {			
+			line.locations = [ { lat: connections[i][0], lng: connections[i][1] }, { lat: connections[i][2], lng: connections[i][3] } ];
+			this.addLine( line );
+		}
+		
+		
+		
+		// add 8 shine sprites
+		
+		for ( var i=0; i < 8; i++ ) {
+			sprites[i] = this.addSprite( {
+				image: 'hologram/hologram-shine.svg',
+				scale: 0.01,
+				offset: -0.5,
+				opacity: 0.5
+			} );
+			pulse( i );
+		}
+		
+		
 	} );
-	pulse( i );
-}
 
 
-} );
 	myearth.addEventListener( 'click', function( event ) {
 	
-		if ( ! event.id || event.id == 'SEA' ) return; // no country hit
+	if ( ! event.id || event.id == 'SEA' ) return; // no country hit
+	
+	
+	// toggle selection		
+	if ( selected_countries.indexOf(event.id) != -1 ) { // remove
+		selected_countries.splice(selected_countries.indexOf(event.id), 1);
+	} else { // add
+		selected_countries.push( event.id );
+	}
+	
+	
+	// build mapStyles CSS string like: #US, #CN, #RU { fill: green; }
+	if ( selected_countries.length ) {
+	
+		myearth.mapStyles = '#' + selected_countries.join(', #') + ' { fill: #44cc44; }';
 		
+		// show info
+		document.getElementById( 'info' ).innerHTML = 'Selected: ' + selected_countries.join(', ');
 		
-		// toggle selection		
-		if ( selected_countries.indexOf(event.id) != -1 ) { // remove
-			selected_countries.splice(selected_countries.indexOf(event.id), 1);
-		} else { // add
-			selected_countries.push( event.id );
-		}
+	} else {
+	
+		myearth.mapStyles = '';
 		
+		// show info
+		document.getElementById( 'info' ).innerHTML = 'no countries selected';
 		
-		// build mapStyles CSS string like: #US, #CN, #RU { fill: green; }
-		if ( selected_countries.length ) {
-		
-			myearth.mapStyles = '#' + selected_countries.join(', #') + ' { fill: #4fb400; }';
-			
-			// show info
-			document.getElementById( 'info' ).innerHTML = 'Selected: ' + selected_countries.join(', ');
-			
-		} else {
-		
-			myearth.mapStyles = '';
-			
-			// show info
-			document.getElementById( 'info' ).innerHTML = 'no countries selected';
-			
-		}
+	}
 
 
-		// redraw map to apply new mapStyles
-		myearth.redrawMap();
-		
+	// redraw map to apply new mapStyles
+	myearth.redrawMap();
+	
 
-	} );
+} );
 	
 	
 } );
+
 
 function getRandomInt(min, max) {
 	min = Math.ceil(min);
@@ -194,19 +195,17 @@ var connections = [
 	[55.5914993286,37.2615013123, 40.080101013183594,116.58499908447266],
 	[55.5914993286,37.2615013123, 25.2527999878,55.3643989563],
 ];
+
+
 </script>
 
 </head>
+
 <body>
-	<h1 style="padding-bottom: 1em;">Country Selector</h1>
-	
-	<div id="wrapper">		
-		<div>This examples uses <a href="../docs/api/earth.htm#maphittest"><em>mapHitTest</em></a>, <a href="../docs/api/earth.htm#mapstyles"><em>mapStyles</em></a> and <a href="../docs/api/earth.htm#redrawmap">redrawMap()</a><br>&nbsp;</div>
-		
-		<div id="info">Click on cvountries!</div>
-		
-		<div id="myearth"></div>
-		
+
+	<div id="myearth">
+		<div id="glow"></div>
 	</div>
+
 </body>
 </html>
